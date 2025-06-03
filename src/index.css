@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply font-sans text-dark bg-light dark:bg-dark dark:text-light transition-colors duration-300;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-bold tracking-tight;
+  }
+
+  h1 {
+    @apply text-4xl sm:text-5xl md:text-6xl lg:text-7xl;
+  }
+
+  h2 {
+    @apply text-3xl sm:text-4xl md:text-5xl;
+  }
+
+  h3 {
+    @apply text-2xl sm:text-3xl;
+  }
+
+  p {
+    @apply text-base sm:text-lg leading-relaxed;
+  }
+}
+
+@layer components {
+  .container-custom {
+    @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .nav-link {
+    @apply relative inline-block py-1.5 text-dark dark:text-light opacity-70 hover:opacity-100 transition-opacity duration-200;
+  }
+
+  .nav-link::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300;
+  }
+
+  .nav-link:hover::after {
+    @apply w-full;
+  }
+
+  .nav-link.active {
+    @apply opacity-100;
+  }
+
+  .nav-link.active::after {
+    @apply w-full;
+  }
+
+  .project-card {
+    @apply border-b border-highlight dark:border-muted py-8 relative overflow-hidden transition-all duration-300 hover:pl-2;
+  }
+
+  .project-card::before {
+    content: '';
+    @apply absolute left-0 top-1/2 -translate-y-1/2 w-0 h-0 bg-primary opacity-0 transition-all duration-300;
+  }
+
+  .project-card:hover::before {
+    @apply w-1 h-1/2 opacity-100;
+  }
+}
+
+.bg-dot-pattern {
+  background-image: radial-gradient(#d1d5db 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+.dark .bg-dot-pattern {
+  background-image: radial-gradient(#4b5563 1px, transparent 1px);
+}
