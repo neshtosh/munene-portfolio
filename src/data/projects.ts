@@ -3,7 +3,7 @@ import { Project } from '../types';
 export const projects: Project[] = [
   {
     id: 'studio-mega',
-    title: 'Studio Mega',
+    title: 'Homer',
     description: 'Brand identity and website redesign for a design agency',
     year: '2023',
     tags: ['Branding', 'UI/UX', 'Development'],
@@ -14,7 +14,7 @@ export const projects: Project[] = [
   },
   {
     id: 'the-brigade',
-    title: 'The Brigade',
+    title: 'Wateki',
     description: 'E-commerce platform for a fashion brand',
     year: '2022',
     tags: ['E-commerce', 'Development'],
@@ -25,7 +25,7 @@ export const projects: Project[] = [
   },
   {
     id: 'push',
-    title: 'Push',
+    title: 'Tikiti',
     description: 'Mobile app for fitness tracking and coaching',
     year: '2022',
     tags: ['Mobile', 'UI/UX'],
@@ -36,7 +36,7 @@ export const projects: Project[] = [
   },
   {
     id: 'onx-maps',
-    title: 'Onx Maps',
+    title: 'VAT',
     description: 'Interactive mapping platform for outdoor enthusiasts',
     year: '2021',
     tags: ['Web App', 'Development'],
@@ -47,7 +47,7 @@ export const projects: Project[] = [
   },
   {
     id: 'icona',
-    title: 'Icona',
+    title: 'Smata',
     description: 'Icon design system and library for digital products',
     year: '2021',
     tags: ['Design System', 'Iconography'],

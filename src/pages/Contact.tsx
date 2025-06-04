@@ -55,25 +55,25 @@ const Contact: React.FC = () => {
                   className="flex items-center text-muted hover:text-primary transition-colors"
                 >
                   <Mail className="mr-3 w-5 h-5" />
-                  <span>hello@johndoe.dev</span>
+                  <span>aleckogitonga8@gmail.com</span>
                 </a>
                 <a 
-                  href="https://github.com" 
+                  href="https://github.com/neshtosh" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="flex items-center text-muted hover:text-primary transition-colors"
                 >
                   <Github className="mr-3 w-5 h-5" />
-                  <span>github.com/johndoe</span>
+                  <span>github.com/neshtosh</span>
                 </a>
                 <a 
-                  href="https://linkedin.com" 
+                  href="https://www.linkedin.com/in/alex-gitonga-9b49971a2/" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="flex items-center text-muted hover:text-primary transition-colors"
                 >
                   <Linkedin className="mr-3 w-5 h-5" />
-                  <span>linkedin.com/in/johndoe</span>
+                  <span>linkedin.com/in/alex-gitonga</span>
                 </a>
               </div>
             </div>

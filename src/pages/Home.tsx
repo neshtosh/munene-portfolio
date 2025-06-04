@@ -8,9 +8,11 @@ import Particles, { initParticlesEngine } from '@tsparticles/react';
 import { loadFull } from 'tsparticles';
 import type { Engine } from '@tsparticles/engine';
 import { useTheme } from '../context/ThemeContext';
+import LoadingScreen from '../components/LoadingScreen';
 
 const Home: React.FC = () => {
   const [particlesInitd, setParticlesInitd] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { isDarkMode } = useTheme();
 
   useEffect(() => {
@@ -20,6 +22,10 @@ const Home: React.FC = () => {
       setParticlesInitd(true);
     });
   }, []);
+
+  const handleLoadingComplete = () => {
+    setIsLoading(false);
+  };
 
   const container = {
     hidden: { opacity: 0 },
@@ -57,10 +63,10 @@ const Home: React.FC = () => {
     },
     particles: {
       number: {
-        value: 16200,
+        value: 500,
         density: {
           enable: true,
-          area: 100,
+          area: 800,
         },
       },
       color: {
@@ -70,13 +76,10 @@ const Home: React.FC = () => {
         type: "circle",
       },
       shadow: {
-        enable: true,
-        blur: 15,
-        color: isDarkMode ? "#ffffff" : "#1a1a1a",
-        offset: { x: 0, y: 0 },
+        enable: false,
       },
       opacity: {
-        value: 0.8,
+        value: 0.6,
         random: true,
         anim: {
           enable: true,
@@ -86,21 +89,21 @@ const Home: React.FC = () => {
         },
       },
       size: {
-        value: { min: 0.05, max: 2 },
+        value: { min: 1, max: 3 },
         random: true,
         anim: {
           enable: true,
           speed: 2,
-          size_min: 0.05,
+          size_min: 0.1,
           sync: false,
         },
       },
       links: {
         enable: true,
-        distance: 50,
+        distance: 150,
         color: isDarkMode ? "#ffffff" : "#1a1a1a",
-        opacity: 0.2,
-        width: 0.5,
+        opacity: 0.3,
+        width: 1.2,
       },
       move: {
         enable: true,
@@ -125,7 +128,10 @@ const Home: React.FC = () => {
         },
         onClick: {
           enable: false,
-          mode: "push",
+        },
+        onTouch: {
+          enable: true,
+          mode: "attract",
         },
         resize: true,
       },
@@ -133,8 +139,8 @@ const Home: React.FC = () => {
         attract: {
           distance: 400,
           duration: 0.2,
-          factor: 20,
-          maxSpeed: 5,
+          factor: 24,
+          maxSpeed: 6,
         },
       },
     },
@@ -143,8 +149,15 @@ const Home: React.FC = () => {
 
   return (
     <>
+      <LoadingScreen isLoading={isLoading} onLoadingComplete={handleLoadingComplete} />
+      
       {/* Hero Section */}
-      <section className="min-h-screen flex items-center pt-20 pb-20 relative overflow-hidden">
+      <motion.section 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isLoading ? 0 : 1 }}
+        transition={{ duration: 0.5, delay: 0.5 }}
+        className="min-h-screen flex items-center pt-20 pb-20 relative overflow-hidden"
+      >
         {particlesInitd && (
           <Particles
             id="tsparticles"
@@ -160,7 +173,7 @@ const Home: React.FC = () => {
             className="max-w-4xl"
           >
             <motion.p variants={item} className="text-primary font-display text-lg mb-4">
-              John Doe — Web Developer & Designer
+             Alex Munene — Web Developer & Designer
             </motion.p>
             <motion.h1 variants={item} className="font-display font-bold mb-6">
               Creating digital experiences that connect & inspire
@@ -188,18 +201,18 @@ const Home: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2, duration: 1 }}
-            className="absolute bottom-10 left-1/2 -translate-x-1/2 hidden md:block"
+            className="absolute -bottom-20 md:-bottom-60 left-1/2 -translate-x-1/2"
           >
             <a 
               href="#featured-work"
               className="flex flex-col items-center text-muted hover:text-dark dark:hover:text-light transition-colors"
             >
-              <span className="text-sm mb-2">Scroll to explore</span>
+              <span className="text-sm mb-3">psst, over here</span>
               <ChevronDown className="w-4 h-4 animate-bounce" />
             </a>
           </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Featured Work Section */}
       <section id="featured-work" className="py-24 bg-highlight/30 dark:bg-muted/20 bg-dot-pattern">
@@ -274,29 +287,185 @@ const Home: React.FC = () => {
       </section>
 
       {/* Contact Teaser */}
-      <section className="py-24 bg-primary text-white">
-        <div className="container-custom text-center">
+      <section className="py-24 relative overflow-hidden">
+        {/* Space Background */}
+        <div className="absolute inset-0">
+          {/* Galaxy Background */}
+          <div className="absolute inset-0 bg-[url('/galaxy-bg.jpg')] bg-cover bg-center opacity-40 dark:opacity-30" />
+          
+          {/* Animated Stars */}
+          <div className="absolute inset-0">
+            {/* Main Star Grid */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0.8)_1px,transparent_1px)] dark:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.8)_1px,transparent_1px)] bg-[length:40px_40px] animate-twinkle" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0.8)_1px,transparent_1px)] dark:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.8)_1px,transparent_1px)] bg-[length:35px_35px] animate-twinkle-delayed" />
+            
+            {/* Additional Star Layer */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0.8)_1px,transparent_1px)] dark:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.8)_1px,transparent_1px)] bg-[length:45px_45px] animate-twinkle-delayed-2" />
+            
+            {/* Star Glow Effect */}
+            <div className="absolute inset-0">
+              {/* Core Glow */}
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0.48)_3px,transparent_3px)] dark:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.48)_3px,transparent_3px)] bg-[length:50px_50px] animate-twinkle-slow" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0.48)_3px,transparent_3px)] dark:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.48)_3px,transparent_3px)] bg-[length:45px_45px] animate-twinkle-slow-delayed" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0.48)_3px,transparent_3px)] dark:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.48)_3px,transparent_3px)] bg-[length:55px_55px] animate-twinkle-slow-delayed-2" />
+              
+              {/* Diffused Outer Glow */}
+              <div className="absolute inset-0">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0.24)_5px,transparent_7px)] dark:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.24)_5px,transparent_7px)] bg-[length:50px_50px] animate-twinkle-slow blur-[1px]" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0.24)_5px,transparent_7px)] dark:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.24)_5px,transparent_7px)] bg-[length:45px_45px] animate-twinkle-slow-delayed blur-[1px]" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0.24)_5px,transparent_7px)] dark:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.24)_5px,transparent_7px)] bg-[length:55px_55px] animate-twinkle-slow-delayed-2 blur-[1px]" />
+              </div>
+
+              {/* Soft Light Emission */}
+              <div className="absolute inset-0">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0.12)_7px,transparent_10px)] dark:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.12)_7px,transparent_10px)] bg-[length:50px_50px] animate-twinkle-slow blur-[2px]" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0.12)_7px,transparent_10px)] dark:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.12)_7px,transparent_10px)] bg-[length:45px_45px] animate-twinkle-slow-delayed blur-[2px]" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0.12)_7px,transparent_10px)] dark:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.12)_7px,transparent_10px)] bg-[length:55px_55px] animate-twinkle-slow-delayed-2 blur-[2px]" />
+              </div>
+            </div>
+
+          </div>
+
+          {/* Nebula Effect */}
+          <div className="absolute inset-0">
+            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 dark:bg-primary/20 rounded-full blur-3xl animate-pulse-slow" />
+            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-primary/20 dark:bg-primary/20 rounded-full blur-3xl animate-pulse-slow-reverse" />
+          </div>
+
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/30 to-background dark:via-background/50" />
+        </div>
+
+        <div className="container-custom relative">
           <motion.div
             initial={{ opacity: 0, y: 50, rotateZ: -5 }}
             whileInView={{ opacity: 1, y: 0, rotateZ: 0 }}
             transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
             viewport={{ once: true, margin: "-100px" }}
+            className="max-w-3xl mx-auto text-center"
           >
-            <h2 className="font-display text-4xl md:text-5xl font-bold mb-6">
+            <motion.div
+              initial={{ scale: 0.95 }}
+              whileInView={{ scale: 1 }}
+              transition={{ duration: 0.5 }}
+              className="relative inline-block mb-8"
+            >
+              <div className="absolute -inset-4 bg-primary/10 dark:bg-primary/10 rounded-full blur-xl" />
+              <h2 className="font-display text-4xl md:text-5xl font-bold relative">
               Let's work together
             </h2>
-            <p className="text-xl md:text-2xl text-white/80 max-w-2xl mx-auto mb-10">
+            </motion.div>
+
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="text-xl md:text-2xl text-muted max-w-2xl mx-auto mb-12"
+            >
               Have a project in mind? Let's discuss how we can bring your ideas to life.
-            </p>
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+            >
             <Link
               to="/contact"
-              className="inline-flex items-center bg-white text-primary px-8 py-4 rounded-full font-medium hover:bg-white/90 transition-colors"
-            >
-              Get in Touch <ArrowRight className="ml-2 w-4 h-4" />
+                className="group relative inline-flex items-center px-8 py-4 overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/10 dark:from-primary/20 dark:to-primary/10 rounded-full transition-all duration-300 group-hover:scale-110" />
+                <div className="absolute inset-0 bg-gradient-to-r from-primary to-primary/80 rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <span className="relative font-medium text-dark dark:text-light group-hover:text-white transition-colors">
+                  Get in Touch <ArrowRight className="ml-2 w-4 h-4 inline-block transition-transform duration-300 group-hover:translate-x-1" />
+                </span>
             </Link>
+            </motion.div>
           </motion.div>
         </div>
       </section>
+
+      <style>
+        {`
+          @keyframes twinkle {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+          }
+
+          @keyframes twinkle-delayed {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+          }
+
+          @keyframes twinkle-delayed-2 {
+            0%, 100% { opacity: 0.35; }
+            50% { opacity: 0.75; }
+          }
+
+          @keyframes twinkle-slow {
+            0%, 100% { opacity: 0.24; }
+            50% { opacity: 0.48; }
+          }
+
+          @keyframes twinkle-slow-delayed {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.44; }
+          }
+
+          @keyframes twinkle-slow-delayed-2 {
+            0%, 100% { opacity: 0.28; }
+            50% { opacity: 0.52; }
+          }
+
+          .animate-twinkle {
+            animation: twinkle 4s ease-in-out infinite;
+          }
+
+          .animate-twinkle-delayed {
+            animation: twinkle-delayed 4s ease-in-out infinite;
+            animation-delay: 1.3s;
+          }
+
+          .animate-twinkle-delayed-2 {
+            animation: twinkle-delayed-2 4s ease-in-out infinite;
+            animation-delay: 2.6s;
+          }
+
+          .animate-twinkle-slow {
+            animation: twinkle-slow 6s ease-in-out infinite;
+          }
+
+          .animate-twinkle-slow-delayed {
+            animation: twinkle-slow-delayed 6s ease-in-out infinite;
+            animation-delay: 2s;
+          }
+
+          .animate-twinkle-slow-delayed-2 {
+            animation: twinkle-slow-delayed-2 6s ease-in-out infinite;
+            animation-delay: 4s;
+          }
+
+          @keyframes pulse-slow {
+            0% { opacity: 0.15; transform: scale(1); }
+            50% { opacity: 0.25; transform: scale(1.1); }
+            100% { opacity: 0.15; transform: scale(1); }
+          }
+
+          @keyframes pulse-slow-reverse {
+            0% { opacity: 0.15; transform: scale(1); }
+            50% { opacity: 0.25; transform: scale(0.9); }
+            100% { opacity: 0.15; transform: scale(1); }
+          }
+
+          .animate-pulse-slow {
+            animation: pulse-slow 8s ease-in-out infinite;
+          }
+
+          .animate-pulse-slow-reverse {
+            animation: pulse-slow-reverse 8s ease-in-out infinite;
+          }
+        `}
+      </style>
     </>
   );
 };
