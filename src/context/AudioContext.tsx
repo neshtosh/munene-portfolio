@@ -45,10 +45,17 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         console.log('Audio started playing');
       } catch (error) {
         console.error('Audio playback failed:', error);
+      } finally {
+        // Remove event listeners after first successful interaction
+        const events = ['scroll', 'touchstart'];
+        events.forEach(event => {
+          document.removeEventListener(event, handleUserInteraction);
+        });
+        console.log('Removed interaction listeners');
       }
     };
 
-    // Add event listeners for user interaction
+    // Add event listeners for initial user interaction
     const handleUserInteraction = () => {
       console.log('User interaction detected');
       if (!hasInteracted.current) {
@@ -56,20 +63,42 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       }
     };
 
-    // Listen for scroll and touch events
-    const events = ['scroll', 'touchstart'];
-    events.forEach(event => {
+    const initialInteractionEvents = ['scroll', 'touchstart'];
+    initialInteractionEvents.forEach(event => {
       document.addEventListener(event, handleUserInteraction);
     });
+
+    // Handle page visibility changes
+    const handleVisibilityChange = () => {
+      if (!audioRef.current) return;
+
+      if (document.visibilityState === 'hidden') {
+        console.log('Page hidden, pausing audio');
+        audioRef.current.pause();
+      } else {
+        console.log('Page visible');
+        // Attempt to resume playback only if not muted and interacted before
+        if (!isMuted && hasInteracted.current) {
+           audioRef.current.play().catch(error => {
+            console.error('Audio resume failed:', error);
+          });
+        } else {
+          console.log('Audio not resumed: muted or no prior interaction');
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     // Cleanup function
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();
       }
-      events.forEach(event => {
+      initialInteractionEvents.forEach(event => {
         document.removeEventListener(event, handleUserInteraction);
       });
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []); // Empty dependency array as we only want to initialize once
 
@@ -80,13 +109,17 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     localStorage.setItem('isMuted', JSON.stringify(isMuted));
     
     if (isMuted) {
+      console.log('Muted, pausing audio');
       audioRef.current.pause();
-    } else if (hasInteracted.current) {
+    } else if (hasInteracted.current && document.visibilityState === 'visible') { // Only play if not muted, interacted, and page is visible
+      console.log('Unmuted and interacted, attempting to play audio');
       audioRef.current.play().catch(error => {
-        console.error('Audio playback failed:', error);
+        console.error('Audio playback failed on unmute:', error);
       });
+    } else {
+       console.log('Audio not played on unmute: no interaction or page hidden');
     }
-  }, [isMuted]);
+  }, [isMuted, hasInteracted]); // Added hasInteracted to dependency array to react to interaction state changes
 
   useEffect(() => {
     if (!audioRef.current) return;
