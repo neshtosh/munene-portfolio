@@ -166,7 +166,7 @@ const About: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: index * 0.05 }}
                 viewport={{ once: true }}
-                className="px-4 py-2 bg-white dark:bg-dark-600 border border-highlight dark:border-dark-800 rounded-full text-sm font-medium"
+                className="px-4 py-2 bg-light dark:bg-dark-400 border border-highlight dark:border-dark-800 rounded-full text-sm font-medium dark:text-dark "
               >
                 {skill}
               </motion.span>
