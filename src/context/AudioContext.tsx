@@ -30,42 +30,50 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     
     if (savedMuteState !== null) {
       setIsMuted(JSON.parse(savedMuteState));
+    } else {
+      // Attempt to play on initial load if not previously muted
+      audioRef.current.play().catch(error => {
+        console.error('Initial autoplay failed:', error);
+      });
     }
+
     if (savedVolume !== null) {
       setVolume(JSON.parse(savedVolume));
     }
 
-    // Function to start audio playback
-    const startAudio = async () => {
-      if (!audioRef.current || isMuted) return;
+    // Function to attempt audio playback
+    const attemptPlay = async () => {
+      if (!audioRef.current || isMuted || audioRef.current.paused) return;
       
       try {
         await audioRef.current.play();
-        hasInteracted.current = true;
-        console.log('Audio started playing');
+        console.log('Audio playback attempted and likely succeeded');
       } catch (error) {
         console.error('Audio playback failed:', error);
-      } finally {
-        // Remove event listeners after first successful interaction
-        const events = ['scroll', 'touchstart'];
-        events.forEach(event => {
-          document.removeEventListener(event, handleUserInteraction);
-        });
-        console.log('Removed interaction listeners');
       }
     };
 
-    // Add event listeners for initial user interaction
+    // Add event listeners for any user interaction
     const handleUserInteraction = () => {
-      console.log('User interaction detected');
       if (!hasInteracted.current) {
-        startAudio();
+        hasInteracted.current = true;
+        console.log('User interaction detected, hasInteracted set to true');
+        // Attempt to play after interaction if not muted and page is visible
+        if (!isMuted && document.visibilityState === 'visible') {
+           attemptPlay();
+        }
+      } else {
+        console.log('User interaction detected, but already interacted');
+         // If already interacted, just ensure playback if not muted and visible
+         if (!isMuted && audioRef.current?.paused && document.visibilityState === 'visible') {
+            attemptPlay();
+         }
       }
     };
 
-    const initialInteractionEvents = ['scroll', 'touchstart'];
-    initialInteractionEvents.forEach(event => {
-      document.addEventListener(event, handleUserInteraction);
+    const interactionEvents = ['scroll', 'touchstart', 'click', 'keydown'];
+    interactionEvents.forEach(event => {
+      document.addEventListener(event, handleUserInteraction, { once: true }); // Use once:true to avoid multiple handlers per event type initially
     });
 
     // Handle page visibility changes
@@ -77,13 +85,9 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         audioRef.current.pause();
       } else {
         console.log('Page visible');
-        // Attempt to resume playback only if not muted and interacted before
-        if (!isMuted && hasInteracted.current) {
-           audioRef.current.play().catch(error => {
-            console.error('Audio resume failed:', error);
-          });
-        } else {
-          console.log('Audio not resumed: muted or no prior interaction');
+        // Attempt to resume playback only if not muted and interacted before and currently paused
+        if (!isMuted && hasInteracted.current && audioRef.current.paused) {
+           attemptPlay();
         }
       }
     };
@@ -95,7 +99,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       if (audioRef.current) {
         audioRef.current.pause();
       }
-      initialInteractionEvents.forEach(event => {
+       interactionEvents.forEach(event => {
         document.removeEventListener(event, handleUserInteraction);
       });
       document.removeEventListener('visibilitychange', handleVisibilityChange);
@@ -113,13 +117,14 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       audioRef.current.pause();
     } else if (hasInteracted.current && document.visibilityState === 'visible') { // Only play if not muted, interacted, and page is visible
       console.log('Unmuted and interacted, attempting to play audio');
+       // Attempt to play when unmuted, if user has interacted and page is visible
       audioRef.current.play().catch(error => {
         console.error('Audio playback failed on unmute:', error);
       });
     } else {
        console.log('Audio not played on unmute: no interaction or page hidden');
     }
-  }, [isMuted, hasInteracted]); // Added hasInteracted to dependency array to react to interaction state changes
+  }, [isMuted, hasInteracted]);
 
   useEffect(() => {
     if (!audioRef.current) return;

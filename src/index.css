@@ -9,6 +9,7 @@
   
   body {
     @apply font-sans text-dark bg-light dark:bg-dark dark:text-light transition-colors duration-300;
+    cursor: none; /* Hide default cursor */
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -79,4 +80,57 @@
 
 .dark .bg-dot-pattern {
   background-image: radial-gradient(#4b5563 1px, transparent 1px);
+}
+
+/* Styles for the custom cursor container */
+.custom-cursor-container {
+  position: fixed;
+  pointer-events: none; /* Allow clicks to pass through */
+  z-index: 9999; /* Ensure it's on top */
+  transform: translate(-50%, -50%); /* Center the container */
+  transition: transform 0.1s ease-out; /* Smooth movement */
+}
+
+/* Styles for the line */
+.cursor-line {
+  position: absolute;
+  width: 100px; /* Adjust length as needed */
+  height: 1px;
+  background-color: currentColor; /* Use current text color */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg); /* Position and rotate the line */
+}
+
+/* Styles for the circles */
+.cursor-circle {
+  position: absolute;
+  border: 1px solid currentColor; /* Use current text color for border */
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Center the circle relative to container */
+}
+
+.cursor-circle.small {
+  width: 10px;
+  height: 10px;
+  transform: translate(-30px, -30px) translate(-50%, -50%); /* Position along the line */
+}
+
+.cursor-circle.medium {
+  width: 20px;
+  height: 20px;
+  transform: translate(0px, 0px) translate(-50%, -50%); /* Position along the line */
+}
+
+.cursor-circle.large {
+  width: 30px;
+  height: 30px;
+  transform: translate(30px, 30px) translate(-50%, -50%); /* Position along the line */
+}
+
+/* Styles for the custom cursor */
+.custom-cursor {
+  display: none;
 }

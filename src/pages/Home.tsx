@@ -201,7 +201,7 @@ const Home: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2, duration: 1 }}
-            className="absolute -bottom-40 md:-bottom-60 left-1/2 -translate-x-1/2"
+            className="absolute -bottom-36 md:-bottom-60 left-1/2 -translate-x-1/2"
           >
             <a 
               href="#featured-work"
