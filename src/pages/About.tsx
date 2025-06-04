@@ -49,7 +49,7 @@ const About: React.FC = () => {
               About
             </motion.p>
             <motion.h1 variants={item} className="font-display font-bold mb-8">
-              Developer & Designer based in Portland
+              Developer & Designer based in Kenya
             </motion.h1>
             <motion.div variants={item} className="space-y-6 text-lg">
               <p>

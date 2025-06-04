@@ -156,7 +156,7 @@ const Contact: React.FC = () => {
           <div className="pt-12 border-t border-highlight dark:border-dark-600">
             <h2 className="text-xl font-display font-bold mb-4">Location</h2>
             <p className="text-muted">
-              Based in Portland, Oregon. Available for remote work worldwide.
+              Based in Nairobi, Kenya. Available for remote work worldwide.
             </p>
           </div>
         </motion.div>
