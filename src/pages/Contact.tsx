@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Github, Linkedin, Send } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -10,22 +11,43 @@ const Contact: React.FC = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
+    setError('');
+
+    try {
+      // Replace these with your actual EmailJS credentials
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        message: formData.message,
+        to_name: 'Alex Gitonga',
+        reply_to: formData.email,
+      };
+
+      await emailjs.send(
+        'service_95g1ozw', // Replace with your EmailJS service ID
+        'template_0eh23kp', // Replace with your EmailJS template ID
+        templateParams,
+        'VkJXtw0gOEaHPJfr3' // Replace with your EmailJS user ID
+      );
+
       setSubmitted(true);
       setFormData({ name: '', email: '', message: '' });
-    }, 1500);
+    } catch (error) {
+      console.error('Error sending email:', error);
+      setError('Failed to send message. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -51,7 +73,7 @@ const Contact: React.FC = () => {
               
               <div className="space-y-4">
                 <a 
-                  href="mailto:hello@johndoe.dev" 
+                  href="mailto:aleckogitonga8@gmail.com" 
                   className="flex items-center text-muted hover:text-primary transition-colors"
                 >
                   <Mail className="mr-3 w-5 h-5" />
@@ -81,6 +103,12 @@ const Contact: React.FC = () => {
             <div className="md:col-span-3">
               {!submitted ? (
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  {error && (
+                    <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-4 rounded-md text-red-600 dark:text-red-400">
+                      {error}
+                    </div>
+                  )}
+                  
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium mb-2">
                       Name
