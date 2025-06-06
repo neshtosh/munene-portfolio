@@ -9,6 +9,7 @@ import { loadFull } from 'tsparticles';
 import type { Engine } from '@tsparticles/engine';
 import { useTheme } from '../context/ThemeContext';
 import LoadingScreen from '../components/LoadingScreen';
+import profileImage from '../assets/profileimage.png';
 
 const Home: React.FC = () => {
   const [particlesInitd, setParticlesInitd] = useState(false);
@@ -326,8 +327,12 @@ const Home: React.FC = () => {
                 Learn more about my process <ArrowRight className="ml-2 w-4 h-4" />
               </Link>
             </div>
-            <div className="bg-highlight dark:bg-dark-600 aspect-square rounded-md flex items-center justify-center">
-              <p className="text-center text-muted">Profile Image</p>
+            <div className="bg-highlight dark:bg-dark-600 aspect-square rounded-md overflow-hidden">
+              <img 
+                src={profileImage} 
+                alt="Alex Munene" 
+                className="w-full h-full object-cover"
+              />
             </div>
           </motion.div>
         </div>
