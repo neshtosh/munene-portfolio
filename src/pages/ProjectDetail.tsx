@@ -5,6 +5,7 @@ import { ArrowLeft, ExternalLink, Github } from 'lucide-react';
 import { projects } from '../data/projects';
 import { Project } from '../types';
 import ProjectPreview from '../components/ProjectPreview';
+import { getProjectImageUrl } from '../utils/imageResolver';
 
 const ProjectDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -30,6 +31,8 @@ const ProjectDetail: React.FC = () => {
       </div>
     );
   }
+
+  const imageUrl = getProjectImageUrl(project.imageFilename);
 
   return (
     <>
@@ -82,22 +85,20 @@ const ProjectDetail: React.FC = () => {
                     Visit Site <ExternalLink className="ml-2 w-4 h-4" />
                   </a>
                 )}
-                <a
-                  href="https://github.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center border border-dark dark:border-light px-6 py-3 rounded-full font-medium hover:bg-highlight dark:hover:bg-dark-600 transition-colors"
-                >
-                  View Code <Github className="ml-2 w-4 h-4" />
-                </a>
               </div>
             </div>
             <div className="aspect-video bg-highlight dark:bg-dark-600 rounded-lg overflow-hidden">
-              <img 
-                src={project.imageUrl} 
-                alt={project.title} 
-                className="w-full h-full object-cover"
-              />
+              {imageUrl ? (
+                <img 
+                  src={imageUrl} 
+                  alt={project.title} 
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-muted">
+                  Image not found
+                </div>
+              )}
             </div>
           </motion.div>
 
@@ -109,13 +110,6 @@ const ProjectDetail: React.FC = () => {
             <h2 className="font-display text-2xl md:text-3xl font-bold mb-6">Project Overview</h2>
             <div className="prose prose-lg dark:prose-invert max-w-none">
               <p>{project.detailContent}</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies lacinia, nisl nisl aliquam nisl, vel aliquam nisl nisl sit amet nisl. Sed euismod, nisl vel ultricies lacinia, nisl nisl aliquam nisl, vel aliquam nisl nisl sit amet nisl.</p>
-              
-              <h3>The Challenge</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies lacinia, nisl nisl aliquam nisl, vel aliquam nisl nisl sit amet nisl.</p>
-              
-              <h3>The Solution</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies lacinia, nisl nisl aliquam nisl, vel aliquam nisl nisl sit amet nisl.</p>
             </div>
           </motion.div>
         </div>

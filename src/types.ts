@@ -5,8 +5,10 @@ export interface Project {
   year: string;
   tags: string[];
   category: string;
-  imageUrl: string;
+  imageFilename: string;
+  imageUrl?: string;
   link?: string;
+  codeLink?: string;
   technologies: string[];
   detailContent?: string;
 }

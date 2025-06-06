@@ -16,10 +16,11 @@ const ProjectPreview: React.FC<ProjectPreviewProps> = ({ project }) => {
       transition={{ duration: 0.6 }}
       viewport={{ once: true, margin: "-100px" }}
       whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+      className="group"
     >
       <Link 
         to={`/projects/${project.id}`} 
-        className="project-card group flex items-center"
+        className="project-card flex items-center"
       >
         <div className="flex-shrink-0 w-20 text-sm text-muted mr-8">
           {project.year}
