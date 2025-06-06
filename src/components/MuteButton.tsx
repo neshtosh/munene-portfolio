@@ -5,56 +5,67 @@ import { useAudio } from '../context/AudioContext';
 const MuteButton: React.FC = () => {
   const { isMuted, toggleMute, volume, setVolume } = useAudio();
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const volumeTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768); // Tailwind's md breakpoint is 768px
-    };
-
-    // Set initial mobile state
-    handleResize();
-
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (isMobile && showVolumeSlider) {
-      // Start timer to hide slider after 2 seconds on mobile
-      timerRef.current = setTimeout(() => {
-        setShowVolumeSlider(false);
-      }, 2000); // 2000ms = 2 seconds
-    } else if (timerRef.current) {
-      // Clear timer if slider is hidden or not on mobile
-      clearTimeout(timerRef.current);
-      timerRef.current = null;
+  // Function to hide the slider after a delay
+  const startVolumeTimer = () => {
+    // Clear any existing timer
+    if (volumeTimerRef.current) {
+      clearTimeout(volumeTimerRef.current);
     }
+    // Set a new timer to hide the slider after 2 seconds
+    volumeTimerRef.current = setTimeout(() => {
+      setShowVolumeSlider(false);
+    }, 2000); // 2000 milliseconds = 2 seconds
+  };
 
-    // Cleanup timer on unmount or state change
+  // Clear timer on component unmount
+  useEffect(() => {
     return () => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-        timerRef.current = null;
+      if (volumeTimerRef.current) {
+        clearTimeout(volumeTimerRef.current);
       }
     };
-  }, [showVolumeSlider, isMobile]); // Re-run effect when showVolumeSlider or isMobile changes
+  }, []);
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseFloat(e.target.value);
     setVolume(newVolume);
-    // Reset timer on volume change to keep slider visible while interacting
-    if (isMobile) {
-       if (timerRef.current) {
-        clearTimeout(timerRef.current);
-       }
-       timerRef.current = setTimeout(() => {
-          setShowVolumeSlider(false);
-       }, 2000);
+    // Restart the timer whenever the volume changes
+    startVolumeTimer();
+  };
+
+  const handleButtonClick = () => {
+    // Toggle mute state
+    toggleMute();
+    
+    // Show slider on button click only on small screens
+    if (window.innerWidth < 768) { // Tailwind's md breakpoint is 768px
+      setShowVolumeSlider(true);
+      startVolumeTimer(); // Start the timer to hide it
+    } else {
+       // On larger screens, the slider visibility is handled by hover
+       // If the button is clicked on a large screen, we might want to toggle visibility or just rely on hover.
+       // For now, keep hover behavior on large screens.
+    }
+  };
+
+  const handleMouseEnter = () => {
+    // Only show slider on hover on large screens
+    if (window.innerWidth >= 768) {
+      setShowVolumeSlider(true);
+      // Clear the timer if it exists when hovering on larger screens
+      if (volumeTimerRef.current) {
+        clearTimeout(volumeTimerRef.current);
+        volumeTimerRef.current = null; // Clear ref after clearing timer
+      }
+    }
+  };
+
+  const handleMouseLeave = () => {
+    // Only hide slider on mouse leave on large screens
+    if (window.innerWidth >= 768) {
+      setShowVolumeSlider(false);
     }
   };
 
@@ -67,12 +78,11 @@ const MuteButton: React.FC = () => {
   return (
     <div 
       className="relative group"
-      onMouseEnter={() => !isMobile && setShowVolumeSlider(true)} // Only show on hover if not mobile
-      onMouseLeave={() => !isMobile && setShowVolumeSlider(false)} // Only hide on leave if not mobile
-      onClick={() => isMobile && setShowVolumeSlider(!showVolumeSlider)} // Toggle on click if mobile
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <button
-        onClick={toggleMute}
+        onClick={handleButtonClick}
         className="p-2 rounded-full hover:bg-highlight dark:hover:bg-dark-600 transition-colors"
         aria-label={isMuted ? "Unmute" : "Mute"}
       >
@@ -80,7 +90,9 @@ const MuteButton: React.FC = () => {
       </button>
       
       {showVolumeSlider && (
-        <div className="absolute right-0 top-full mt-2 p-2 bg-white dark:bg-dark rounded-lg shadow-lg border border-dark/10 dark:border-light/10 transition-opacity duration-300 ease-out" style={{ opacity: showVolumeSlider ? 1 : 0 }}>
+        // Add a check for window size here as well to be extra sure
+        // or rely on the logic above to only set showVolumeSlider true on mobile click
+        <div className="absolute right-0 top-full mt-2 p-2 bg-white dark:bg-dark rounded-lg shadow-lg border border-dark/10 dark:border-light/10">
           <input
             type="range"
             min="0"

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useAnimation } from 'framer-motion';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ProjectPreview from '../components/ProjectPreview';
@@ -14,6 +14,7 @@ const Home: React.FC = () => {
   const [particlesInitd, setParticlesInitd] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const { isDarkMode } = useTheme();
+  const controls = useAnimation();
 
   useEffect(() => {
     initParticlesEngine(async (engine: Engine) => {
@@ -23,12 +24,16 @@ const Home: React.FC = () => {
     });
   }, []);
 
+  useEffect(() => {
+    controls.start('visible');
+  }, [controls]);
+
   const handleLoadingComplete = () => {
     setIsLoading(false);
   };
 
   const container = {
-    hidden: { opacity: 0 },
+    hidden: { opacity: 0, y: 50 },
     show: {
       opacity: 1,
       transition: {
@@ -167,32 +172,74 @@ const Home: React.FC = () => {
         )}
         <div className="container-custom relative z-10">
           <motion.div
-            initial={{ opacity: 0, y: 50, rotateZ: -5 }}
+            initial={{ opacity: 0, y: 50 }}
             animate="show"
             variants={container}
             className="max-w-4xl"
           >
             <motion.p variants={item} className="text-primary font-display text-lg mb-4">
-             Alex Munene — Web Developer & Designer
+              Alex Munene — Crafting Digital Experiences
             </motion.p>
-            <motion.h1 variants={item} className="font-display font-bold mb-6">
-              Creating digital experiences that connect & inspire
-            </motion.h1>
-            <motion.p variants={item} className="text-xl md:text-2xl text-muted max-w-3xl mb-8">
-              Building fast, responsive, and beautiful digital products with a focus on user experience and performance.
-            </motion.p>
+            {/* Define animated characters array before rendering */}
+            {/* const animatedCharacters = Array.from('Connect & Inspire').map((char, index) => ( */}
+            {/*   <motion.span */}
+            {/*     key={`${char}-${index}`} */}
+            {/*     initial={{ opacity: 0, y: 10 }} */}
+            {/*     animate={{ opacity: 1, y: 0 }} */}
+            {/*     transition={{ */}
+            {/*       duration: 0.4,  */}
+            {/*       ease: [0.04, 0.62, 0.23, 0.98], */}
+            {/*       delay: index * 0.03 // Stagger delay */}
+            {/*     }}  */}
+            {/*     style={{ display: 'inline-block', whiteSpace: 'pre' }} // Preserve spaces and ensure block display */}
+            {/*   > */}
+            {/*     {char === ' ' ? '\u00A0' : char} */}
+            {/*   </motion.span> */}
+            {/* )); */}
+
+            {/* return ( */}
+              <motion.h1 
+                // Use motion.h1 with variants for staggered children animation
+                variants={{
+                  hidden: { opacity: 0 },
+                  show: {
+                    opacity: 1,
+                    transition: {
+                      staggerChildren: 0.03 // Stagger delay between characters
+                    }
+                  }
+                }}
+                initial="hidden"
+                animate="show"
+                className="font-display font-bold mb-6 text-3xl md:text-4xl"
+              >
+                {Array.from('Connect & Inspire').map((char, index) => (
+                  <motion.span
+                    key={`${char}-${index}`}
+                    // Define individual character animation variants
+                    variants={{
+                      hidden: { opacity: 0, y: 10 }, // Initial state
+                      show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] } } // Animate to this state
+                    }}
+                    style={{ display: 'inline-block', whiteSpace: 'pre' }} // Preserve spaces and ensure block display
+                  >
+                    {char === ' ' ? '\u00A0' : char}
+                  </motion.span>
+                ))}
+              </motion.h1>
+            {/* ); */}
             <motion.div variants={item} className="flex flex-wrap gap-4">
               <Link 
                 to="/projects"
                 className="inline-flex items-center bg-primary text-white px-6 py-3 rounded-full font-medium hover:bg-primary/90 transition-colors"
               >
-                View Projects <ArrowRight className="ml-2 w-4 h-4" />
+                Explore Projects <ArrowRight className="ml-2 w-4 h-4" />
               </Link>
               <Link
                 to="/contact"
                 className="inline-flex items-center border border-dark dark:border-light px-6 py-3 rounded-full font-medium hover:bg-highlight dark:hover:bg-dark-600 transition-colors"
               >
-                Get in Touch
+                Reach Out
               </Link>
             </motion.div>
           </motion.div>

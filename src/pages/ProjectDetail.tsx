@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, ExternalLink, Github } from 'lucide-react';
 import { projects } from '../data/projects';
 import { Project } from '../types';
+import ProjectPreview from '../components/ProjectPreview';
 
 const ProjectDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -62,7 +63,7 @@ const ProjectDetail: React.FC = () => {
                     {project.technologies.map((tech) => (
                       <span 
                         key={tech} 
-                        className="px-3 py-1 bg-highlight dark:bg-dark-600 rounded-full text-xs"
+                        className="px-3 py-1 bg-highlight text-dark dark:bg-dark-600 rounded-full text-xs"
                       >
                         {tech}
                       </span>
