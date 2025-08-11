@@ -2,6 +2,19 @@ import { Project } from '../types';
 
 export const projects: Project[] = [
   {
+    id: 'icona',
+    title: 'pressbox',
+    description: 'Sports news and blogs website',
+    year: '2025',
+    tags: ['Design System', 'Iconography'],
+    category: 'Design',
+    imageFilename: 'pressbox.png',
+    link: 'https://pressbox.co.ke/',
+    codeLink: 'https://github.com/yourusername/smata',
+    technologies: [ 'Figma', 'SVG', 'React', 'Next.js'],
+    detailContent: 'PressBox is a Kenyan sports website designed to deliver live scores, league standings, player statistics, and sports news in an engaging, easy-to-navigate interface. Built for fans who want real-time updates and insightful data, PressBox aims to cover local and international sports, offering features like interactive charts, match highlights, and community-driven discussions. The platform is tailored to be fast, mobile-friendly, and visually appealing, making it the go-to hub for sports enthusiasts in Kenya and beyond.'
+  },
+  {
     id: 'studio-mega',
     title: 'BOTB',
     description: 'Showcase and commission platform for visual artists.',
@@ -66,4 +79,5 @@ export const projects: Project[] = [
     technologies: [ 'Figma', 'SVG', 'React'],
     detailContent: 'Smata is an intelligent water metering system designed to improve water usage efficiency, transparency, and management in residential and commercial settings. The system uses IoT-enabled smart meters to track real-time water consumption, detect leaks, and transmit data to a centralized dashboard for both users and providers. With features like automated billing, mobile alerts, and usage analytics, Smata empowers users to monitor consumption and reduce waste, while helping utilities manage resources more effectively. The platform is secure, scalable, and optimized for integration into existing infrastructure.'
   }
+  
 ];
