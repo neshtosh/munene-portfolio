@@ -53,7 +53,7 @@ const About: React.FC = () => {
             </motion.h1>
             <motion.div variants={item} className="space-y-6 text-lg">
               <p>
-                I'm a full-stack developer with a passion for creating intuitive and engaging digital experiences. My journey in web development began over 5 years ago, and since then, I've worked with clients ranging from startups to established businesses.
+                I'm a full-stack developer with a passion for creating intuitive and engaging digital experiences. My journey in web development began over 2 years ago, and since then, I've worked with clients ranging from startups to established businesses.
               </p>
               <p>
                 My approach combines technical expertise with a strong design sensibility. I believe that great digital products should not only function flawlessly but also connect with users on an emotional level through thoughtful design.
