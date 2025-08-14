@@ -16,6 +16,19 @@ export const projects: Project[] = [
   },
   {
     id: 'studio-mega',
+    title: 'Teks-mart',
+    description: 'Wholesale market for tech vendors both small and large.',
+    year: '2025',
+    tags: ['Branding', 'UI/UX', 'Development'],
+    category: 'Design & Development',
+    imageFilename: 'botb.png',
+    link: 'https://nextg-phi.vercel.app/',
+    codeLink: 'https://github.com/yourusername/homer',
+    technologies: ['React', 'Next.js', 'Tailwind CSS', 'Framer Motion'],
+    detailContent: 'Teqsmart is a modern, tech-driven platform built with Next.js, designed to deliver innovative digital solutions with speed, scalability, and a sleek user experience. It combines responsive design, optimized performance, and a clean interface to support a variety of tech-based applications and services.'
+  },
+  {
+    id: 'studio-mega',
     title: 'BOTB',
     description: 'Showcase and commission platform for visual artists.',
     year: '2025',
