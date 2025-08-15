@@ -315,7 +315,7 @@ const Home: React.FC = () => {
                 About Me
               </h2>
               <p className="text-lg md:text-xl mb-6">
-                I'm a web developer and designer with over 5 years of experience crafting digital solutions for brands and businesses.
+                I'm a web developer and designer with over 2 years of experience crafting digital solutions for brands and businesses.
               </p>
               <p className="text-muted mb-8">
                 My approach combines technical expertise with design sensibility to create experiences that are both functional and beautiful.
