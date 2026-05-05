@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import ThemeToggle from './ThemeToggle';
 import MuteButton from './MuteButton';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -56,7 +55,6 @@ const Navbar: React.FC = () => {
             {/* Minimal controls */}
             <div className="flex items-center gap-1">
               <MuteButton />
-              <ThemeToggle />
             </div>
 
             {/* Mobile menu button */}

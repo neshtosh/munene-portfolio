@@ -118,6 +118,26 @@ export const projects: Project[] = [
     technologies: ['React', 'Mapbox GL', 'Node.js', 'MongoDB'],
     detailContent: 'VAT is a professional talent agency platform designed to represent, promote, and connect visual artists with opportunities in the creative industry. The website showcases artist portfolios, manages bookings, and streamlines communication between talent and clients. With a sleek, minimalist design, VAT emphasizes professionalism and creativity, making it easy for brands, galleries, and event organizers to discover and engage artists. The platform also includes tools for artist profile management, availability tracking, and featured projects.'
   },
-  
-  
+  {
+    id: 'smartsecurityconsult',
+    title: 'SMART SECURITY',
+    description: 'Professional security consultancy app with blogs, gallery, and courses.',
+    year: '2026',
+    tags: ['Web App', 'Development', 'Design'],
+    category: 'Design & Development',
+    imageFilename: 'smartsecurity.png',
+    technologies: ['React', 'Node.js', 'Tailwind CSS', 'SQL'],
+    detailContent: 'SmartSecurityConsult is a professional app for a security consultancy service, designed to deliver expert guidance and resources in the security domain. The platform features a blog section for sharing industry insights and security tips, an image and video gallery for showcasing case studies and demonstrations, and a courses section where users can enroll in professional security training. Built with a clean, trustworthy aesthetic, it serves as a comprehensive hub for both clients seeking consultancy services and professionals looking to expand their security expertise.'
+  },
+  {
+    id: 'm-taji-tracker',
+    title: 'M-TAJI TRACKER',
+    description: 'Publish and track projects using satellite imagery with job opportunities.',
+    year: '2026',
+    tags: ['Web App', 'Development', 'GIS'],
+    category: 'Design & Development',
+    imageFilename: 'mtaji-tracker.png',
+    technologies: ['React', 'Node.js', 'Satellite Imagery API', 'Tailwind CSS', 'SQL'],
+    detailContent: 'M-Taji Tracker is a platform for publishing and tracking projects using satellite imagery, primarily designed for government initiatives and large-scale development programs. Users can post projects with geographic data, monitor progress through satellite imagery, and discover job opportunities associated with each project. The platform connects job seekers with opportunities on posted initiatives, fostering transparency and participation in government-led and community development efforts. It enables better visibility into project progress and helps bridge the gap between project owners and those seeking employment on such initiatives.'
+  },
 ];

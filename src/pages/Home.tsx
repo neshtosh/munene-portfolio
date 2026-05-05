@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -7,14 +7,17 @@ import { projects } from '../data/projects';
 import Particles, { initParticlesEngine } from '@tsparticles/react';
 import { loadFull } from 'tsparticles';
 import type { Engine } from '@tsparticles/engine';
-import { useTheme } from '../context/ThemeContext';
 import LoadingScreen from '../components/LoadingScreen';
 import profileImage from '../assets/profileimage.png';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import HeroGlobe3D from '../components/HeroGlobe3D';
+
+const ABOUT_ME_LOTTIE_SRC =
+  'https://lottie.host/d99459bc-822c-4453-a397-5e678103fd0e/CCjDEgyPFk.lottie';
 
 const Home: React.FC = () => {
   const [particlesInitd, setParticlesInitd] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const { isDarkMode } = useTheme();
   const controls = useAnimation();
 
   useEffect(() => {
@@ -76,7 +79,7 @@ const Home: React.FC = () => {
         },
       },
       color: {
-        value: isDarkMode ? "#ffffff" : "#1a1a1a",
+        value: "#ffffff",
       },
       shape: {
         type: "circle",
@@ -107,7 +110,7 @@ const Home: React.FC = () => {
       links: {
         enable: true,
         distance: 150,
-        color: isDarkMode ? "#ffffff" : "#1a1a1a",
+        color: "#ffffff",
         opacity: 0.3,
         width: 1.2,
       },
@@ -164,14 +167,15 @@ const Home: React.FC = () => {
         transition={{ duration: 0.5, delay: 0.5 }}
         className="min-h-screen flex items-center pt-20 pb-20 relative overflow-hidden"
       >
+        <HeroGlobe3D />
         {particlesInitd && (
           <Particles
             id="tsparticles"
             options={particlesOptions as any}
-            className="absolute inset-0 z-0"
+            className="absolute inset-0 z-10"
           />
         )}
-        <div className="container-custom relative z-10">
+        <div className="container-custom relative z-20">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate="show"
@@ -311,9 +315,22 @@ const Home: React.FC = () => {
             className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center"
           >
             <div>
-              <h2 className="font-display text-4xl md:text-5xl font-bold mb-6">
-                About Me
-              </h2>
+              <div className="mb-6 space-y-3 md:space-y-4">
+                <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight">
+                  About Me
+                </h2>
+                <span
+                  className="relative block h-[3.15rem] w-full max-w-[9rem] -translate-y-[10%] sm:max-w-[10.8rem] md:h-[4.05rem] md:max-w-[12.6rem] lg:max-w-[14.4rem] [filter:drop-shadow(0_3px_6px_rgb(0_0_0_/_14%))] contrast-[1.08] dark:[filter:drop-shadow(0_4px_10px_rgb(255_255_255_/_10%))] dark:contrast-[1.05]"
+                  aria-hidden
+                >
+                  <DotLottieReact
+                    src={ABOUT_ME_LOTTIE_SRC}
+                    loop
+                    autoplay
+                    className="h-full w-full dark:brightness-0 dark:invert"
+                  />
+                </span>
+              </div>
               <p className="text-lg md:text-xl mb-6">
                 I'm a web developer and designer with over 2 years of experience crafting digital solutions for brands and businesses.
               </p>
