@@ -4,7 +4,7 @@
 
 @layer base {
   html {
-    scroll-behavior: smooth;
+    /* keep default scroll; smooth only on in-page anchors via CSS where needed */
   }
   
   body {
@@ -79,4 +79,25 @@
 
 .dark .bg-dot-pattern {
   background-image: radial-gradient(#4b5563 1px, transparent 1px);
+}
+
+/* Honey-inspired hero headline: metallic silver gradient fill */
+.hero-honey-title {
+  font-family: Inter, sans-serif;
+  font-weight: 400;
+  letter-spacing: -0.05em;
+  line-height: 0.92;
+  background-image: linear-gradient(227deg, rgb(124, 124, 124) 0%, rgb(244, 241, 238) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.hero-honey-title span {
+  background-image: linear-gradient(227deg, rgb(124, 124, 124) 0%, rgb(244, 241, 238) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }

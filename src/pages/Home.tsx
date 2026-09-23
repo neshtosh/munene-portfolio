@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ProjectPreview from '../components/ProjectPreview';
 import { projects } from '../data/projects';
 import Particles, { initParticlesEngine } from '@tsparticles/react';
-import { loadFull } from 'tsparticles';
+import { loadSlim } from '@tsparticles/slim';
 import type { Engine } from '@tsparticles/engine';
 import LoadingScreen from '../components/LoadingScreen';
 import profileImage from '../assets/profileimage.png';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-import HeroGlobe3D from '../components/HeroGlobe3D';
+import ScrollHighlightWords from '../components/ScrollHighlightWords';
+import SobhaRevealTitle from '../components/SobhaRevealTitle';
+import OvalAccent from '../components/OvalAccent';
 
 const ABOUT_ME_LOTTIE_SRC =
   'https://lottie.host/d99459bc-822c-4453-a397-5e678103fd0e/CCjDEgyPFk.lottie';
@@ -18,19 +20,65 @@ const ABOUT_ME_LOTTIE_SRC =
 const Home: React.FC = () => {
   const [particlesInitd, setParticlesInitd] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [enableParticles, setEnableParticles] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const controls = useAnimation();
 
   useEffect(() => {
-    initParticlesEngine(async (engine: Engine) => {
-      await loadFull(engine);
-    }).then(() => {
-      setParticlesInitd(true);
-    });
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isNarrow = window.matchMedia('(max-width: 768px)').matches;
+    if (reduceMotion || isNarrow) {
+      setEnableParticles(false);
+      return;
+    }
+    setEnableParticles(true);
   }, []);
+
+  useEffect(() => {
+    if (isLoading || !enableParticles) return;
+
+    let cancelled = false;
+    const idle = window.requestIdleCallback
+      ? window.requestIdleCallback
+      : (cb: IdleRequestCallback) => window.setTimeout(() => cb({ didTimeout: false, timeRemaining: () => 0 } as IdleDeadline), 200);
+
+    const id = idle(() => {
+      initParticlesEngine(async (engine: Engine) => {
+        await loadSlim(engine);
+      }).then(() => {
+        if (!cancelled) setParticlesInitd(true);
+      });
+    });
+
+    return () => {
+      cancelled = true;
+      if (window.cancelIdleCallback) window.cancelIdleCallback(id as number);
+      else window.clearTimeout(id as number);
+    };
+  }, [isLoading, enableParticles]);
 
   useEffect(() => {
     controls.start('visible');
   }, [controls]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          void video.play().catch(() => undefined);
+        } else {
+          video.pause();
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, []);
 
   const handleLoadingComplete = () => {
     setIsLoading(false);
@@ -70,12 +118,13 @@ const Home: React.FC = () => {
     fullScreen: {
       enable: false,
     },
+    fpsLimit: 45,
     particles: {
       number: {
-        value: 500,
+        value: 55,
         density: {
           enable: true,
-          area: 800,
+          area: 900,
         },
       },
       color: {
@@ -84,72 +133,43 @@ const Home: React.FC = () => {
       shape: {
         type: "circle",
       },
-      shadow: {
-        enable: false,
-      },
       opacity: {
-        value: 0.6,
-        random: true,
-        anim: {
-          enable: true,
-          speed: 1,
-          opacity_min: 0.2,
-          sync: false,
-        },
+        value: { min: 0.2, max: 0.55 },
       },
       size: {
-        value: { min: 1, max: 3 },
-        random: true,
-        anim: {
-          enable: true,
-          speed: 2,
-          size_min: 0.1,
-          sync: false,
-        },
+        value: { min: 1, max: 2.5 },
       },
       links: {
         enable: true,
-        distance: 150,
+        distance: 130,
         color: "#ffffff",
-        opacity: 0.3,
-        width: 1.2,
+        opacity: 0.22,
+        width: 1,
       },
       move: {
         enable: true,
-        speed: 1,
+        speed: 0.7,
         direction: "none",
         random: true,
         straight: false,
-        out_mode: "out",
-        bounce: false,
-        attract: {
-          enable: true,
-          rotateX: 600,
-          rotateY: 1200,
-        },
+        outModes: { default: "out" },
       },
     },
     interactivity: {
       events: {
         onHover: {
           enable: true,
-          mode: "attract",
+          mode: "grab",
         },
         onClick: {
           enable: false,
         },
-        onTouch: {
-          enable: true,
-          mode: "attract",
-        },
         resize: true,
       },
       modes: {
-        attract: {
-          distance: 400,
-          duration: 0.2,
-          factor: 24,
-          maxSpeed: 6,
+        grab: {
+          distance: 140,
+          links: { opacity: 0.35 },
         },
       },
     },
@@ -159,90 +179,65 @@ const Home: React.FC = () => {
   return (
     <>
       <LoadingScreen isLoading={isLoading} onLoadingComplete={handleLoadingComplete} />
-      
-      {/* Hero Section */}
+
+      {/* Sticky stack (desktop): hero + trusted stay; Featured / About slide over.
+          On mobile, sections flow normally for smoother scrolling. */}
+      <div className="relative">
+      {/* Hero — sticky under following panels (md+) */}
       <motion.section 
         initial={{ opacity: 0 }}
         animate={{ opacity: isLoading ? 0 : 1 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
-        className="min-h-screen flex items-center pt-20 pb-20 relative overflow-hidden"
+        transition={{ duration: 0.5, delay: 0.15 }}
+        className="relative md:sticky md:top-0 z-0 min-h-[100svh] flex items-center pt-20 pb-16 md:pb-20 overflow-hidden"
       >
-        <HeroGlobe3D />
-        {particlesInitd && (
-          <Particles
-            id="tsparticles"
-            options={particlesOptions as any}
-            className="absolute inset-0 z-10"
+        <div className="absolute inset-0 z-0">
+          <video
+            ref={videoRef}
+            className="absolute inset-0 h-full w-full object-cover"
+            src="/newhero.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            aria-hidden="true"
           />
+        </div>
+        {particlesInitd && enableParticles && (
+          <div className="absolute inset-0 z-10">
+            <Particles
+              id="tsparticles"
+              options={particlesOptions as any}
+              className="absolute inset-0"
+            />
+          </div>
         )}
         <div className="container-custom relative z-20">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate="show"
             variants={container}
-            className="max-w-4xl"
+            className="max-w-5xl"
           >
-            <motion.p variants={item} className="text-primary font-display text-lg mb-4">
+            <motion.p
+              variants={item}
+              className="text-white/50 font-sans text-xs sm:text-sm md:text-base tracking-[0.12em] sm:tracking-[0.18em] uppercase mb-4 sm:mb-6 max-w-[90%]"
+            >
               Alex Munene — Crafting Digital Experiences
             </motion.p>
-            {/* Define animated characters array before rendering */}
-            {/* const animatedCharacters = Array.from('Connect & Inspire').map((char, index) => ( */}
-            {/*   <motion.span */}
-            {/*     key={`${char}-${index}`} */}
-            {/*     initial={{ opacity: 0, y: 10 }} */}
-            {/*     animate={{ opacity: 1, y: 0 }} */}
-            {/*     transition={{ */}
-            {/*       duration: 0.4,  */}
-            {/*       ease: [0.04, 0.62, 0.23, 0.98], */}
-            {/*       delay: index * 0.03 // Stagger delay */}
-            {/*     }}  */}
-            {/*     style={{ display: 'inline-block', whiteSpace: 'pre' }} // Preserve spaces and ensure block display */}
-            {/*   > */}
-            {/*     {char === ' ' ? '\u00A0' : char} */}
-            {/*   </motion.span> */}
-            {/* )); */}
-
-            {/* return ( */}
-              <motion.h1 
-                // Use motion.h1 with variants for staggered children animation
-                variants={{
-                  hidden: { opacity: 0 },
-                  show: {
-                    opacity: 1,
-                    transition: {
-                      staggerChildren: 0.03 // Stagger delay between characters
-                    }
-                  }
-                }}
-                initial="hidden"
-                animate="show"
-                className="font-display font-bold mb-6 text-3xl md:text-4xl"
-              >
-                {Array.from('Connect & Inspire').map((char, index) => (
-                  <motion.span
-                    key={`${char}-${index}`}
-                    // Define individual character animation variants
-                    variants={{
-                      hidden: { opacity: 0, y: 10 }, // Initial state
-                      show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] } } // Animate to this state
-                    }}
-                    style={{ display: 'inline-block', whiteSpace: 'pre' }} // Preserve spaces and ensure block display
-                  >
-                    {char === ' ' ? '\u00A0' : char}
-                  </motion.span>
-                ))}
-              </motion.h1>
-            {/* ); */}
-            <motion.div variants={item} className="flex flex-wrap gap-4">
+            <h1 className="hero-honey-title mb-6 sm:mb-8 text-[2.1rem] leading-[0.95] sm:text-5xl md:text-7xl lg:text-[7.5rem] max-w-5xl break-words">
+              <SobhaRevealTitle text="Connect & Inspire" active={!isLoading} />
+            </h1>
+            <motion.div variants={item} className="flex flex-wrap gap-3 sm:gap-4">
               <Link 
                 to="/projects"
-                className="inline-flex items-center bg-primary text-white px-6 py-3 rounded-full font-medium hover:bg-primary/90 transition-colors"
+                className="inline-flex items-center bg-primary text-white px-5 py-2.5 sm:px-6 sm:py-3 rounded-full text-sm sm:text-base font-medium hover:bg-primary/90 transition-colors"
               >
                 Explore Projects <ArrowRight className="ml-2 w-4 h-4" />
               </Link>
               <Link
                 to="/contact"
-                className="inline-flex items-center border border-dark dark:border-light px-6 py-3 rounded-full font-medium hover:bg-highlight dark:hover:bg-dark-600 transition-colors"
+                className="inline-flex items-center border border-white/70 text-white px-5 py-2.5 sm:px-6 sm:py-3 rounded-full text-sm sm:text-base font-medium hover:bg-white/10 transition-colors"
               >
                 Reach Out
               </Link>
@@ -253,21 +248,64 @@ const Home: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2, duration: 1 }}
-            className="absolute -bottom-36 md:-bottom-60 left-1/2 -translate-x-1/2"
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 md:-bottom-36 lg:-bottom-60"
           >
             <a 
-              href="#featured-work"
-              className="flex flex-col items-center text-muted hover:text-dark dark:hover:text-light transition-colors"
+              href="#trusted-by"
+              className="flex flex-col items-center text-white/50 hover:text-white transition-colors"
             >
-              <span className="text-sm mb-3">psst, over here</span>
+              <span className="text-xs sm:text-sm mb-2 sm:mb-3 tracking-wide">psst, over here</span>
               <ChevronDown className="w-4 h-4 animate-bounce" />
             </a>
           </motion.div>
         </div>
       </motion.section>
 
-      {/* Featured Work Section */}
-      <section id="featured-work" className="py-24 bg-highlight/30 dark:bg-muted/20 bg-dot-pattern">
+      {/* Trusted By — sticky on md+ so Featured can slide over it */}
+      <section
+        id="trusted-by"
+        className="relative md:sticky md:top-0 z-10 border-t border-white/10 bg-dark py-12 sm:py-16 md:py-20"
+      >
+        <div className="container-custom">
+          <div className="mx-auto max-w-3xl text-center px-1">
+            <h2 className="font-sans text-xl sm:text-2xl font-normal tracking-[-0.03em] text-light md:text-3xl">
+              Trusted by these companies
+            </h2>
+            <p className="mt-3 font-sans text-xs sm:text-sm tracking-wide text-white/40 md:text-base">
+              used by the world&apos;s leading teams &amp; startups
+            </p>
+          </div>
+
+          <ul className="mt-10 sm:mt-12 flex flex-wrap items-center justify-center gap-x-6 gap-y-6 sm:gap-x-10 sm:gap-y-8 md:mt-14 md:gap-x-14 md:gap-y-10">
+            {[
+              { src: '/logos/tikiti.png', alt: 'Tikiti' },
+              { src: '/logos/pressbox.png', alt: 'Pressbox' },
+              { src: '/logos/smata.png', alt: 'Smata' },
+              { src: '/logos/talanta.png', alt: 'Talanta' },
+              { src: '/logos/teksmart.png', alt: 'Teksmart' },
+              { src: '/logos/kibo-finance.png', alt: 'Kibo Finance' },
+              { src: '/logos/mavuno-foods.png', alt: 'Mavuno Foods' },
+              { src: '/logos/grand-memories.png', alt: 'Grand Memories Resort & Spa' },
+              { src: '/logos/taji.png', alt: 'M-taji' },
+            ].map((logo) => (
+              <li key={logo.src} className="flex items-center justify-center">
+                <img
+                  src={logo.src}
+                  alt={logo.alt}
+                  className="h-6 w-auto max-w-[6.5rem] object-contain opacity-45 transition-opacity duration-300 hover:opacity-70 sm:h-8 sm:max-w-[7.5rem] md:h-9 md:max-w-[8.5rem]"
+                  loading="lazy"
+                />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* Featured Work — stacks over Trusted / hero on md+ */}
+      <section
+        id="featured-work"
+        className="relative z-20 py-16 sm:py-20 md:py-24 bg-highlight dark:bg-[#161616] bg-dot-pattern"
+      >
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 50, rotateZ: -5 }}
@@ -275,9 +313,16 @@ const Home: React.FC = () => {
             transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
             viewport={{ once: true, margin: "-100px" }}
           >
-            <h2 className="font-display text-4xl md:text-5xl font-bold mb-16">
-              Featured Work
+            <h2 className="relative inline-block font-sans font-normal tracking-[-0.04em] text-3xl sm:text-4xl md:text-5xl mb-6 text-dark dark:text-light">
+              <OvalAccent />
+              <span className="relative z-10">
+                <ScrollHighlightWords text="Featured Work" as="span" className="block" />
+              </span>
             </h2>
+            <ScrollHighlightWords
+              text="Selected projects spanning product interfaces, brand sites, and interactive experiences."
+              className="font-sans text-base sm:text-lg md:text-xl lg:text-[1.55rem] leading-relaxed md:leading-[1.5] text-dark dark:text-light max-w-3xl mb-10 sm:mb-16"
+            />
 
             <motion.div
               initial="hidden"
@@ -292,7 +337,7 @@ const Home: React.FC = () => {
               ))}
             </motion.div>
 
-            <div className="mt-16 text-center">
+            <div className="mt-12 sm:mt-16 text-center">
               <Link
                 to="/projects"
                 className="inline-flex items-center text-dark dark:text-light font-medium hover:text-primary dark:hover:text-primary transition-colors"
@@ -304,20 +349,23 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* About Teaser Section */}
-      <section className="py-24">
+      {/* About Me — last covering panel; stack ends here */}
+      <section
+        id="about-me"
+        className="relative z-30 py-16 sm:py-20 md:py-24 bg-light dark:bg-dark"
+      >
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 50, rotateZ: -5 }}
             whileInView={{ opacity: 1, y: 0, rotateZ: 0 }}
             transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
             viewport={{ once: true, margin: "-100px" }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center"
+            className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center"
           >
             <div>
               <div className="mb-6 space-y-3 md:space-y-4">
-                <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight">
-                  About Me
+                <h2 className="font-sans font-normal tracking-[-0.04em] text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-dark dark:text-light">
+                  <ScrollHighlightWords text="About Me" as="span" className="block" />
                 </h2>
                 <span
                   className="relative block h-[3.15rem] w-full max-w-[9rem] -translate-y-[10%] sm:max-w-[10.8rem] md:h-[4.05rem] md:max-w-[12.6rem] lg:max-w-[14.4rem] [filter:drop-shadow(0_3px_6px_rgb(0_0_0_/_14%))] contrast-[1.08] dark:[filter:drop-shadow(0_4px_10px_rgb(255_255_255_/_10%))] dark:contrast-[1.05]"
@@ -331,12 +379,14 @@ const Home: React.FC = () => {
                   />
                 </span>
               </div>
-              <p className="text-lg md:text-xl mb-6">
-                I'm a web developer and designer with over 2 years of experience crafting digital solutions for brands and businesses.
-              </p>
-              <p className="text-muted mb-8">
-                My approach combines technical expertise with design sensibility to create experiences that are both functional and beautiful.
-              </p>
+              <ScrollHighlightWords
+                text="I'm a web developer and designer with over 5 years of experience crafting digital solutions for brands and businesses."
+                className="font-sans text-base sm:text-lg md:text-xl lg:text-[1.55rem] leading-relaxed md:leading-[1.5] mb-6 text-dark dark:text-light"
+              />
+              <ScrollHighlightWords
+                text="My approach combines technical expertise with design sensibility to create experiences that are both functional and beautiful."
+                className="font-sans text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed md:leading-[1.5] mb-8 text-dark dark:text-light"
+              />
               <Link
                 to="/about"
                 className="inline-flex items-center text-dark dark:text-light font-medium hover:text-primary dark:hover:text-primary transition-colors"
@@ -344,7 +394,7 @@ const Home: React.FC = () => {
                 Learn more about my process <ArrowRight className="ml-2 w-4 h-4" />
               </Link>
             </div>
-            <div className="bg-highlight dark:bg-dark-600 aspect-square rounded-md overflow-hidden">
+            <div className="bg-highlight dark:bg-dark-600 aspect-square rounded-md overflow-hidden max-w-md md:max-w-none mx-auto w-full">
               <img 
                 src={profileImage} 
                 alt="Alex Munene" 
@@ -354,6 +404,7 @@ const Home: React.FC = () => {
           </motion.div>
         </div>
       </section>
+      </div>
 
       {/* Contact Teaser */}
       <section className="py-24 relative overflow-hidden">
@@ -420,19 +471,15 @@ const Home: React.FC = () => {
               className="relative inline-block mb-8"
             >
               <div className="absolute -inset-4 bg-primary/10 dark:bg-primary/10 rounded-full blur-xl" />
-              <h2 className="font-display text-4xl md:text-5xl font-bold relative">
-              Let's work together
-            </h2>
+              <h2 className="font-sans font-normal tracking-[-0.04em] text-4xl md:text-5xl relative text-dark dark:text-light">
+                <ScrollHighlightWords text="Let's work together" as="span" className="block" />
+              </h2>
             </motion.div>
 
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="text-xl md:text-2xl text-muted max-w-2xl mx-auto mb-12"
-            >
-              Have a project in mind? Let's discuss how we can bring your ideas to life.
-            </motion.p>
+            <ScrollHighlightWords
+              text="Have a project in mind? Let's discuss how we can bring your ideas to life."
+              className="font-sans text-xl md:text-2xl leading-relaxed max-w-2xl mx-auto mb-12 text-dark dark:text-light"
+            />
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}

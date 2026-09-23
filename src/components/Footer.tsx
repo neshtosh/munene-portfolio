@@ -52,7 +52,7 @@ const Footer: React.FC = () => {
           </div>
         </div>
         
-        <div className="mt-8 pt-8 border-t border-highlight dark:border-dark-600 text-sm text-muted flex justify-between items-center">
+        <div className="mt-8 pt-8 border-t border-highlight dark:border-dark-600 text-sm text-muted flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
           <p>&copy; {currentYear} Alex Munene. All Rights Reserved.</p>
           <div className="flex gap-6">
             <Link 

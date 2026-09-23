@@ -20,13 +20,13 @@ const ProjectPreview: React.FC<ProjectPreviewProps> = ({ project }) => {
     >
       <Link 
         to={`/projects/${project.id}`} 
-        className="project-card flex items-center"
+        className="project-card flex items-center gap-3 sm:gap-0"
       >
-        <div className="flex-shrink-0 w-20 text-sm text-muted mr-8">
+        <div className="flex-shrink-0 w-14 sm:w-20 text-xs sm:text-sm text-muted sm:mr-8">
           {project.year}
         </div>
-        <div className="flex-grow">
-          <h3 className="text-3xl md:text-4xl font-display font-bold group-hover:text-primary transition-colors">
+        <div className="flex-grow min-w-0">
+          <h3 className="text-xl sm:text-3xl md:text-4xl font-display font-bold group-hover:text-primary transition-colors break-words">
             {project.title}
           </h3>
         </div>
