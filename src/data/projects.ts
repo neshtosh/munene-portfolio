@@ -136,7 +136,8 @@ export const projects: Project[] = [
     year: '2026',
     tags: ['Web App', 'Development', 'GIS'],
     category: 'Design & Development',
-    imageFilename: 'mtaji-tracker.png',
+    imageFilename: 'tracker.png',
+    link: 'https://www.m-taji.co.ke/',
     technologies: ['React', 'Node.js', 'Satellite Imagery API', 'Tailwind CSS', 'SQL'],
     detailContent: 'M-Taji Tracker is a platform for publishing and tracking projects using satellite imagery, primarily designed for government initiatives and large-scale development programs. Users can post projects with geographic data, monitor progress through satellite imagery, and discover job opportunities associated with each project. The platform connects job seekers with opportunities on posted initiatives, fostering transparency and participation in government-led and community development efforts. It enables better visibility into project progress and helps bridge the gap between project owners and those seeking employment on such initiatives.'
   },

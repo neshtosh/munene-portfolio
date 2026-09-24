@@ -42,9 +42,10 @@ const Contact: React.FC = () => {
 
       setSubmitted(true);
       setFormData({ name: '', email: '', message: '' });
-    } catch (error) {
-      console.error('Error sending email:', error);
-      setError('Failed to send message. Please try again.');
+    } catch (err) {
+      console.error('Error sending email:', err);
+      const detail = err && typeof err === 'object' && 'text' in err ? String((err as { text?: string }).text) : '';
+      setError(detail || 'Failed to send message. Please try again.');
     } finally {
       setIsSubmitting(false);
     }

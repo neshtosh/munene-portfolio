@@ -8,8 +8,9 @@ import Particles, { initParticlesEngine } from '@tsparticles/react';
 import { loadSlim } from '@tsparticles/slim';
 import type { Engine } from '@tsparticles/engine';
 import LoadingScreen from '../components/LoadingScreen';
-import profileImage from '../assets/profileimage.png';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import WireframeTerrain from '../components/WireframeTerrain';
+import AboutWordSequence from '../components/AboutWordSequence';
 import ScrollHighlightWords from '../components/ScrollHighlightWords';
 import SobhaRevealTitle from '../components/SobhaRevealTitle';
 import OvalAccent from '../components/OvalAccent';
@@ -349,61 +350,54 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* About Me — last covering panel; stack ends here */}
-      <section
-        id="about-me"
-        className="relative z-30 py-16 sm:py-20 md:py-24 bg-light dark:bg-dark"
-      >
-        <div className="container-custom">
+      {/* About Me — pinned while the word sequence scrubs with scroll */}
+      <AboutWordSequence>
+        <div className="pointer-events-none absolute inset-0 bg-black">
+          <div className="absolute inset-x-0 top-[7%] aspect-[16/9] w-full">
+            <WireframeTerrain />
+          </div>
+        </div>
+        <div className="container-custom relative z-10 flex h-full items-center py-16 sm:py-20 md:py-24">
           <motion.div
             initial={{ opacity: 0, y: 50, rotateZ: -5 }}
             whileInView={{ opacity: 1, y: 0, rotateZ: 0 }}
             transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
             viewport={{ once: true, margin: "-100px" }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center"
+            className="max-w-xl md:max-w-[46%]"
           >
-            <div>
-              <div className="mb-6 space-y-3 md:space-y-4">
-                <h2 className="font-sans font-normal tracking-[-0.04em] text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-dark dark:text-light">
-                  <ScrollHighlightWords text="About Me" as="span" className="block" />
-                </h2>
-                <span
-                  className="relative block h-[3.15rem] w-full max-w-[9rem] -translate-y-[10%] sm:max-w-[10.8rem] md:h-[4.05rem] md:max-w-[12.6rem] lg:max-w-[14.4rem] [filter:drop-shadow(0_3px_6px_rgb(0_0_0_/_14%))] contrast-[1.08] dark:[filter:drop-shadow(0_4px_10px_rgb(255_255_255_/_10%))] dark:contrast-[1.05]"
-                  aria-hidden
-                >
-                  <DotLottieReact
-                    src={ABOUT_ME_LOTTIE_SRC}
-                    loop
-                    autoplay
-                    className="h-full w-full dark:brightness-0 dark:invert"
-                  />
-                </span>
-              </div>
-              <ScrollHighlightWords
-                text="I'm a web developer and designer with over 5 years of experience crafting digital solutions for brands and businesses."
-                className="font-sans text-base sm:text-lg md:text-xl lg:text-[1.55rem] leading-relaxed md:leading-[1.5] mb-6 text-dark dark:text-light"
-              />
-              <ScrollHighlightWords
-                text="My approach combines technical expertise with design sensibility to create experiences that are both functional and beautiful."
-                className="font-sans text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed md:leading-[1.5] mb-8 text-dark dark:text-light"
-              />
-              <Link
-                to="/about"
-                className="inline-flex items-center text-dark dark:text-light font-medium hover:text-primary dark:hover:text-primary transition-colors"
+            <div className="mb-6 space-y-3 md:space-y-4">
+              <h2 className="font-sans font-normal tracking-[-0.04em] text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-light">
+                <ScrollHighlightWords text="About Me" as="span" className="block" />
+              </h2>
+              <span
+                className="relative block h-[3.15rem] w-full max-w-[9rem] -translate-y-[10%] sm:max-w-[10.8rem] md:h-[4.05rem] md:max-w-[12.6rem] lg:max-w-[14.4rem] [filter:brightness(0)_invert(1)]"
+                aria-hidden
               >
-                Learn more about my process <ArrowRight className="ml-2 w-4 h-4" />
-              </Link>
+                <DotLottieReact
+                  src={ABOUT_ME_LOTTIE_SRC}
+                  loop
+                  autoplay
+                  className="h-full w-full"
+                />
+              </span>
             </div>
-            <div className="bg-highlight dark:bg-dark-600 aspect-square rounded-md overflow-hidden max-w-md md:max-w-none mx-auto w-full">
-              <img 
-                src={profileImage} 
-                alt="Alex Munene" 
-                className="w-full h-full object-cover"
-              />
-            </div>
+            <ScrollHighlightWords
+              text="I'm a web developer and designer with over 5 years of experience crafting digital solutions for brands and businesses."
+              className="font-sans text-base sm:text-lg md:text-xl lg:text-[1.55rem] leading-relaxed md:leading-[1.5] mb-6 text-light"
+            />
+            <ScrollHighlightWords
+              text="My approach combines technical expertise with design sensibility to create experiences that are both functional and beautiful."
+              className="font-sans text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed md:leading-[1.5] mb-8 text-light"
+            />
+            <Link
+              to="/about"
+              className="inline-flex items-center text-light font-medium hover:text-primary transition-colors"
+            >
+              Learn more about my process <ArrowRight className="ml-2 w-4 h-4" />
+            </Link>
           </motion.div>
         </div>
-      </section>
+      </AboutWordSequence>
       </div>
 
       {/* Contact Teaser */}
