@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Github, Linkedin, Send } from 'lucide-react';
+import { Mail, Github, Linkedin, Send, Check } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 
 const Contact: React.FC = () => {
@@ -170,14 +170,23 @@ const Contact: React.FC = () => {
                   </button>
                 </form>
               ) : (
-                <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 p-6 rounded-md">
-                  <h3 className="text-xl font-display font-bold mb-2 text-green-700 dark:text-green-400">
-                    Message Sent!
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45, ease: [0.04, 0.62, 0.23, 0.98] }}
+                  className="rounded-md border border-highlight dark:border-white/10 bg-highlight/50 dark:bg-white/[0.04] px-6 py-10 sm:px-8"
+                  role="status"
+                >
+                  <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-full bg-primary text-white">
+                    <Check className="h-5 w-5" strokeWidth={2.25} />
+                  </div>
+                  <h3 className="font-display text-2xl sm:text-3xl font-bold tracking-tight mb-3">
+                    Message sent
                   </h3>
-                  <p className="text-green-600 dark:text-green-300">
+                  <p className="text-muted text-base sm:text-lg leading-relaxed max-w-md">
                     Thanks for reaching out. I'll get back to you as soon as possible.
                   </p>
-                </div>
+                </motion.div>
               )}
             </div>
           </div>

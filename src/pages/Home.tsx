@@ -12,7 +12,6 @@ import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import WireframeTerrain from '../components/WireframeTerrain';
 import AboutWordSequence from '../components/AboutWordSequence';
 import ScrollHighlightWords from '../components/ScrollHighlightWords';
-import SobhaRevealTitle from '../components/SobhaRevealTitle';
 import OvalAccent from '../components/OvalAccent';
 
 const ABOUT_ME_LOTTIE_SRC =
@@ -227,7 +226,7 @@ const Home: React.FC = () => {
               Alex Munene — Crafting Digital Experiences
             </motion.p>
             <h1 className="hero-honey-title mb-6 sm:mb-8 text-[2.1rem] leading-[0.95] sm:text-5xl md:text-7xl lg:text-[7.5rem] max-w-5xl break-words">
-              <SobhaRevealTitle text="Connect & Inspire" active={!isLoading} />
+              Connect & Inspire
             </h1>
             <motion.div variants={item} className="flex flex-wrap gap-3 sm:gap-4">
               <Link 
