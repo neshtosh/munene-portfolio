@@ -22,7 +22,7 @@ export const projects: Project[] = [
     tags: ['Front-end', 'Design'],
     category: 'Design & Development',
     imageFilename: 'mtaji.png',
-    link: 'https://www.m-taji.com',
+    link: 'https://m-taji.vercel.app/',
     
     technologies: [ 'TailwindCSS','Node.js', 'React', 'SQL'],
     detailContent: 'To empower changemakers to cultivate prosperity in their communities through sustainable, innovative, and human-centered initiatives and  spark a new socio-economic renaissance in Africa, unlocking prosperity and dignity for all.'
@@ -35,7 +35,7 @@ export const projects: Project[] = [
     tags: ['Design System', 'Development'],
     category: 'Development',
     imageFilename: 'realaist.png',
-    link: 'https://www.realaist.tech',
+    link: 'https://www.realaist.com',
     
     technologies: [ 'TailwindCSS', 'React', 'Next.js', 'SQL'],
     detailContent: 'REALAIST is an AI-powered platform that connects investors with verified properties from trusted real estate developers & companies.'
