@@ -49,7 +49,7 @@ const About: React.FC = () => {
               About
             </motion.p>
             <motion.h1 variants={item} className="font-display font-bold mb-8">
-              Developer & Designer based in Kenya
+              Developer & Designer in Nairobi
             </motion.h1>
             <motion.div variants={item} className="space-y-6 text-lg">
               <p>
@@ -86,7 +86,7 @@ const About: React.FC = () => {
           >
             <h2 className="font-display text-4xl font-bold mb-4">Services</h2>
             <p className="text-xl text-muted max-w-2xl">
-              I specialize in delivering end-to-end solutions for digital products and experiences.
+              Websites, business systems, and digital presence for brands in Nairobi and beyond.
             </p>
           </motion.div>
 

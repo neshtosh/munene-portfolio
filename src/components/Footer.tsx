@@ -10,7 +10,7 @@ const Footer: React.FC = () => {
       <div className="container-custom">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <p className="text-sm text-muted mb-4">Nairobi ,Kenya</p>
+            <p className="text-sm text-muted mb-4">Nairobi, Kenya</p>
             <p className="text-sm text-muted">Web Developer & Designer</p>
           </div>
           
@@ -25,7 +25,7 @@ const Footer: React.FC = () => {
 
           <div className="flex space-x-6 md:justify-end">
             <a 
-              href="https://github.com" 
+              href="https://github.com/neshtosh" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-dark dark:text-light hover:text-primary dark:hover:text-primary transition-colors"
@@ -34,7 +34,7 @@ const Footer: React.FC = () => {
               <span className="sr-only">GitHub</span>
             </a>
             <a 
-              href="https://linkedin.com" 
+              href="https://www.linkedin.com/in/alex-gitonga-9b49971a2/" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-dark dark:text-light hover:text-primary dark:hover:text-primary transition-colors"
@@ -43,7 +43,7 @@ const Footer: React.FC = () => {
               <span className="sr-only">LinkedIn</span>
             </a>
             <a 
-              href="mailto:hello@johndoe.dev"
+              href="mailto:aleckogitonga8@gmail.com"
               className="text-dark dark:text-light hover:text-primary dark:hover:text-primary transition-colors"
             >
               <Mail size={20} />

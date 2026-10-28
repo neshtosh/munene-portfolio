@@ -2,6 +2,31 @@ import { Project } from '../types';
 
 export const projects: Project[] = [
   {
+    id: 'faida',
+    title: 'FAIDA',
+    description: 'WhatsApp assistant that finds Kenyans the bursaries and benefits they qualify for.',
+    year: '2026',
+    tags: ['AI', 'Conversational Design', 'Development'],
+    category: 'Design & Development',
+    imageFilename: 'faida.webp',
+    link: 'https://wa.me/254741686073',
+    linkLabel: 'Chat with bot',
+    technologies: ['WhatsApp Cloud API', 'Claude API', 'LLM Tool Use', 'Prompt Caching', 'PDF Generation'],
+    detailContent: 'Faida is a WhatsApp assistant that helps Kenyans find bursaries, grants, loans and benefits they qualify for, then fills in the official application forms for them, in English or Kiswahili. A parent can say their daughter\'s school fees are due, name their constituency, and get matched to options like the NG-CDF and county bursaries. Faida then walks them through the official form one short question at a time, reusing details it already has, and returns a pre-filled PDF with clear steps for handing it in. Under the hood, a Claude-powered agent works through a set of tools for matching offers, checking eligibility, collecting missing fields, generating forms, setting deadline reminders, finding the nearest office and verifying whether a forwarded opportunity is real. Sensitive steps are gated in code: nothing is submitted without a recorded YES on the exact summary the user approved, and consent is required before any profile data is stored.'
+  },
+  {
+    id: 'unsigned',
+    title: 'UNSIGNED',
+    description: 'Release platform for independent musicians and creators.',
+    year: '2026',
+    tags: ['Design', 'Front-end', 'Back-end'],
+    category: 'Design & Development',
+    imageFilename: 'unsigned.webp',
+    link: 'https://unsigned-sigma.vercel.app/',
+    technologies: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Framer Motion', 'Three.js', 'ffmpeg.wasm', 'Supabase', 'Vercel', 'OAuth 2.0'],
+    detailContent: 'Unsigned lets independent musicians and creators run their own releases without a label or distributor. You upload a song or video once. The app finds the hook, renders vertical clips in the browser, and publishes to YouTube, TikTok, Instagram, Facebook and SoundCloud from your own accounts. Every release gets a smart link, and every creator gets a public fan page with a mailing list. Built with React 18, TypeScript and Vite on the front end, with three.js (React Three Fiber) and Framer Motion for the 3D and motion work, and ffmpeg.wasm, the Web Audio API and Canvas for in-browser media processing. The back end runs on Supabase (Postgres, Auth, Storage, row-level security) and Vercel serverless functions, integrating the YouTube Data API, TikTok Content Posting API, Meta Graph API and SoundCloud API via OAuth 2.0 with PKCE. I handled the design, front end and back end.'
+  },
+  {
     id: 'grand-memories',
     title: 'GRAND MEMORIES',
     description: 'Hotel Management System',

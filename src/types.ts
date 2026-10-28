@@ -8,6 +8,7 @@ export interface Project {
   imageFilename: string;
   imageUrl?: string;
   link?: string;
+  linkLabel?: string;
   codeLink?: string;
   technologies: string[];
   detailContent?: string;

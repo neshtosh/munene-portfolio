@@ -223,7 +223,7 @@ const Home: React.FC = () => {
               variants={item}
               className="text-white/50 font-sans text-xs sm:text-sm md:text-base tracking-[0.12em] sm:tracking-[0.18em] uppercase mb-4 sm:mb-6 max-w-[90%]"
             >
-              Alex Munene — Crafting Digital Experiences
+              Alex Munene — Websites, systems, and digital presence in Nairobi
             </motion.p>
             <h1 className="hero-honey-title mb-6 sm:mb-8 text-[2.1rem] leading-[0.95] sm:text-5xl md:text-7xl lg:text-[7.5rem] max-w-5xl break-words">
               Connect & Inspire
